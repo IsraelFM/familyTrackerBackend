@@ -1,7 +1,7 @@
 const db = require('../models')
 const Family = db.family;
 
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     // Validate request
     if (!req.body.surname) {
         res.status(400).send({ message: "Content can not be empty!" });
@@ -13,17 +13,26 @@ exports.create = (req, res) => {
         surname: req.body.surname
     });
 
-    // Save Family in the database
-    family
-        .save()
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while creating the family."
+    let familyAlreadyExists = await Family
+        .findOne({surname: req.body.surname})
+
+    if (!familyAlreadyExists) {
+        // Save Family in the database
+        family
+            .save()
+            .then(data => {
+                res.send(data);
+            })
+            .catch(err => {
+                res.status(500).send({
+                    message: err.message || "Some error occurred while creating the family."
+                });
             });
+    } else {
+        res.status(500).send({
+            message: `The family already exists!`
         });
+    }
 };
 
 exports.findOne = (req, res) => {
