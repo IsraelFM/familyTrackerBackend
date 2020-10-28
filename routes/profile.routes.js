@@ -2,12 +2,18 @@ module.exports = app => {
     const profile = require('../controllers/profile.controller');
     let router = require('express').Router();
 
-    router.post('/register', profile.register);
+    router.post('/', profile.create);
     
     router.post('/login', profile.login);
 
+    router.get('/:id', profile.findOne);
+
     router.get('/', profile.findAll);
 
-    app.use('/profile', router);
+    router.put('/:id', profile.update);
+
+    router.delete('/:id', profile.delete);
+
+    app.use('/api/profile', router);
 
 };

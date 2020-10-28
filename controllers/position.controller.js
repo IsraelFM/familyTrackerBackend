@@ -43,7 +43,8 @@ exports.create = async (req, res) => {
 exports.findOne = (req, res) => {
     const profile = req.params.id;
 
-    Position.find({profile})
+    Position
+        .find({profile})
         .then(data => {
             if (!data)
                 res.status(404).send({
@@ -68,33 +69,6 @@ exports.findAll = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving profiles."
-            });
-        });
-};
-
-exports.update = (req, res) => {
-    if (!req.body) {
-        res.status(400).send({
-            message: "Data to update can not be empty!"
-        });
-        return;
-    }
-
-    const { id } = req.params;
-    const dataToUpdate = { location: req.body };
-
-    Position
-        .findByIdAndUpdate(id, dataToUpdate)
-        .then(data => {
-            if (!data) {
-                res.status(404).send({
-                    message: `Cannot update Position with id=${id}. Maybe Position was not found!`
-                });
-            } else res.send({ message: "Position was updated successfully." });
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "Error updating Position with id=" + id
             });
         });
 };
@@ -133,9 +107,9 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
     const profile = req.params.id;
 
-    Position.findOneAndDelete({ profile })
+    Position
+        .findOneAndDelete({ profile })
         .then(data => {
-            console.log(data);
             if (!data) {
                 res.status(404).send({
                     message: `Cannot delete Position to user with id=${profile}. Maybe Position was not found!`

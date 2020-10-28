@@ -35,13 +35,12 @@ module.exports = (mongoose) => {
         }
     });
 
-    schema.methods.generateHash = function (password) {
+    schema.statics.generateHash = function (password) {
         return bcrypt.hashSync(password, bcrypt.genSaltSync(SALT_ROUNDS));
     };
 
     // Authenticate without save salt on database
     schema.methods.validatePassword = function (password) {
-        console.log(password)
         return bcrypt.compareSync(password, this.password);
     };
 
