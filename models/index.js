@@ -9,5 +9,6 @@ db.mongoose = mongoose;
 db.url = dbConfig.url;
 db.profile = require("./profile.model")(mongoose);
 db.family = require("./family.model")(mongoose);
+db.position = require("./position.model")(mongoose);
 
 module.exports = db;

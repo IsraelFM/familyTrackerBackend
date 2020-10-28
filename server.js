@@ -26,12 +26,14 @@ app.use('/', api);
 // Set our api routes
 require('./routes/family.routes')(app);
 require('./routes/profile.routes')(app);
+require('./routes/position.routes')(app);
 
 // Connect to mongodb
 db.mongoose
     .connect(db.url, {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useFindAndModify: false
     })
     .then(() => {
         console.log('Connected to the database!');

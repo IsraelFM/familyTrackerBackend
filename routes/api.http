@@ -14,7 +14,7 @@ Content-Type: application/json
 
 ### Registra usuário John
 
-POST  http://localhost:3000/api/register HTTP/1.1
+POST  http://localhost:3000/profile/register HTTP/1.1
 Content-Type: application/json
 
 {
@@ -24,8 +24,37 @@ Content-Type: application/json
     "password": "johndoe"
 }
 
+############################### CRUD POSITION ###############################
 
-###
+### Busca a posição do usuário
 
+GET  http://localhost:3000/position/5f94c4e17738a2715cb007cc HTTP/1.1
 
-###
+### Registra posição do usuário
+
+POST  http://localhost:3000/position HTTP/1.1
+Content-Type: application/json
+
+{
+    "profile": "5f94c4e17738a2715cb007cc",
+    "coordinates": [
+        -122.5,
+        37.7
+    ]
+}
+
+### Atualiza a posição do usuário
+
+PUT  http://localhost:3000/position/5f94c4e17738a2715cb007cc HTTP/1.1
+Content-Type: application/json
+
+{
+    "coordinates": [
+        -123.5,
+        37.7
+    ]
+}
+
+### Remove a posição do usuário
+
+DELETE http://localhost:3000/position/5f94c4e17738a2715cb007cc HTTP/1.1
