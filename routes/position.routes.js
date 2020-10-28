@@ -4,7 +4,13 @@ module.exports = app => {
 
     router.post('/', position.create);
     
+    router.get('/:id', position.findOne);
+
     router.get('/', position.findAll);
+
+    router.put('/:id', position.update);
+
+    router.delete('/:id', position.delete);
 
     app.use('/position', router);
 

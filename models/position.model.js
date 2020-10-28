@@ -19,8 +19,7 @@ module.exports = (mongoose) => {
         profile: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'profiles',
-            required: true,
-            unique: true
+            required: true
         },
         __v: {
             type: Number,
