@@ -12,6 +12,6 @@ module.exports = app => {
 
     router.delete('/:id', position.delete);
 
-    app.use('/position', router);
+    app.use('/api/position', router);
 
 };
