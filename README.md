@@ -7,8 +7,6 @@
 ## TODO
 
 - Separar o *login* e o *registro* do profile, alocar em um `auth.controller.js`
-- Adicionar o `/api` no início de todas as request
-- Montar CRUD completo para family (no momento está só CR, falta o UD)
 
 ## Changelog
 
@@ -16,3 +14,5 @@
 
 - CRUD completo para position
 - CRUD completo para profile
+- CRUD completo para family
+- Adicionado o `/api` no início de todas as request
