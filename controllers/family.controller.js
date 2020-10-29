@@ -1,7 +1,7 @@
 const db = require('../models')
 const Family = db.family;
 
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     // Validate request
     if (!req.body.surname) {
         res.status(400).send({ message: "Content can not be empty!" });
@@ -13,15 +13,44 @@ exports.create = (req, res) => {
         surname: req.body.surname
     });
 
-    // Save Family in the database
-    family
-        .save()
+    let familyAlreadyExists = await Family
+        .findOne({surname: req.body.surname})
+
+    if (!familyAlreadyExists) {
+        // Save Family in the database
+        family
+            .save()
+            .then(data => {
+                res.send(data);
+            })
+            .catch(err => {
+                res.status(500).send({
+                    message: err.message || "Some error occurred while creating the family."
+                });
+            });
+    } else {
+        res.status(500).send({
+            message: `The family already exists!`
+        });
+    }
+};
+
+exports.findOne = (req, res) => {
+    const id = req.params.id;
+
+    Family
+        .findById(id)
         .then(data => {
-            res.send(data);
+            if (!data)
+                res.status(404).send({
+                    message: "Not found Family with id " + id
+                });
+            else 
+                res.send(data);
         })
-        .catch(err => {
+        .catch(() => {
             res.status(500).send({
-                message: err.message || "Some error occurred while creating the family."
+                message: "Error retrieving Family with id=" + id
             });
         });
 };
@@ -35,6 +64,59 @@ exports.findAll = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving families."
+            });
+        });
+};
+
+exports.update = (req, res) => {
+    if (!req.body) {
+        res.status(400).send({
+            message: "Data to update can not be empty!"
+        });
+        return;
+    }
+
+    const id = req.params.id;
+
+    Family
+        .findByIdAndUpdate(id, req.body)
+        .then(data => {
+            if (!data) {
+                res.status(404).send({
+                    message: `Cannot update Family with id=${id}. Maybe Family was not found!`
+                });
+            } else {
+                res.send({
+                    message: "Family was updated successfully."
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Error updating Family with id=" + id
+            });
+        });
+};
+
+exports.delete = (req, res) => {
+    const id = req.params.id;
+
+    Family
+        .findByIdAndDelete(id)
+        .then(data => {
+            if (!data) {
+                res.status(404).send({
+                    message: `Cannot delete Family with id=${id}. Maybe Family was not found!`
+                });
+            } else {
+                res.send({
+                    message: "Family was deleted successfully!"
+                });
+            }
+        })
+        .catch(() => {
+            res.status(500).send({
+                message: "Could not delete Family with id=" + id
             });
         });
 };

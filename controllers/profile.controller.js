@@ -133,30 +133,6 @@ exports.update = (req, res) => {
 
 exports.delete = (req, res) => {
     const id = req.params.id;
-    const dataToDelete = { deleted_at: new Date() };
-
-    Profile
-        .findOneAndUpdate(id, dataToDelete)
-        .then(data => {
-            if (!data) {
-                res.status(404).send({
-                    message: `Cannot delete Profile with id=${id}. Maybe Profile was not found!`
-                });
-            } else {
-                res.send({
-                    message: "Profile was deleted successfully!"
-                });
-            }
-        })
-        .catch(() => {
-            res.status(500).send({
-                message: "Could not delete Profile with id=" + id
-            });
-        });
-};
-
-exports.delete = (req, res) => {
-    const id = req.params.id;
 
     Profile
         .findByIdAndDelete(id)

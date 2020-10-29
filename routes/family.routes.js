@@ -4,8 +4,14 @@ module.exports = app => {
 
     router.post('/', family.create);
     
+    router.get('/:id', family.findOne);
+
     router.get('/', family.findAll);
 
-    app.use('/family', router);
+    router.put('/:id', family.update);
+
+    router.delete('/:id', family.delete);
+
+    app.use('/api/family', router);
 
 };

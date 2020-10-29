@@ -24,7 +24,6 @@ module.exports = (mongoose) => {
             required: true,
             trim: true
         },
-        deleted_at: Date,
         family: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'families'
