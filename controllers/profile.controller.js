@@ -79,7 +79,8 @@ exports.login = (req, res) => {
                 });
             } else {
                 res.status(200).send({
-                    message: "Authenticated login!"
+                    // Quando o usuário loga eu preciso saber quem é ele pra poder renderizar as telas de perfil
+                    message: profile._id
                 });
             }
         }).catch(err => {
