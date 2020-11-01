@@ -6,6 +6,8 @@ module.exports = app => {
     
     router.get('/:id', family.findOne);
 
+    router.get('/positions/:id', family.findAllPositionOfOneFamily);
+
     router.get('/', family.findAll);
 
     router.put('/:id', family.update);

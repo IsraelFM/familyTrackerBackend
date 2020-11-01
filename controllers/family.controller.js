@@ -1,5 +1,8 @@
+const { Promise } = require('mongoose');
 const db = require('../models')
 const Family = db.family;
+const Profile = db.profile;
+const Position = db.position;
 
 exports.create = async (req, res) => {
     // Validate request
@@ -119,4 +122,31 @@ exports.delete = (req, res) => {
                 message: "Could not delete Family with id=" + id
             });
         });
+};
+
+exports.findAllPositionOfOneFamily = async (req, res) => {
+    const profile = req.params.id;
+    let familyWithPositions = [];
+
+    let profileData = await Profile.findById(profile).select('family');
+
+    if (profileData) {
+        let membersFamily = await Profile.find({family: profileData.family});
+
+        for (const member of membersFamily) {
+            let position = await Position.findOne({profile: member._id}).select('+location.coordinates -_id');
+
+            familyWithPositions.push({
+                profile: member._id,
+                name: member.name,
+                coordinates: position.location.coordinates
+            });
+        }
+
+        res.status(200).send(familyWithPositions);
+    } else {
+        res.status(404).send({
+            message: `Cannot found Family with profiled=${profile}. Maybe Family was not found!`
+        });
+    }
 };

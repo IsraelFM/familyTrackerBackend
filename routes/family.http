@@ -26,3 +26,10 @@ Content-Type: application/json
 ### Remove a família
 
 DELETE http://localhost:3000/api/family/5f9a007bf864041e8ef85c2d HTTP/1.1
+
+
+############################# OTHER OPERATIONS ###############################
+
+### Busca a posição de todos os membros da família pelo id do perfil
+
+GET http://localhost:3000/api/family/positions/5f9e0ba07df17b11f075343c HTTP/1.1
