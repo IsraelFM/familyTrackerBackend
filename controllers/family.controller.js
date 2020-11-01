@@ -130,7 +130,7 @@ exports.findAllPositionOfOneFamily = async (req, res) => {
 
     let profileData = await Profile.findById(profile).select('family');
 
-    if (profileData) {
+    if (profileData && profileData.family) {
         let membersFamily = await Profile.find({family: profileData.family});
 
         for (const member of membersFamily) {
@@ -146,7 +146,7 @@ exports.findAllPositionOfOneFamily = async (req, res) => {
         res.status(200).send(familyWithPositions);
     } else {
         res.status(404).send({
-            message: `Cannot found Family with profiled=${profile}. Maybe Family was not found!`
+            message: `Cannot found Family with profile id=${profile}. Maybe Family was not found!`
         });
     }
 };
