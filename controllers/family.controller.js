@@ -1,4 +1,3 @@
-const { Promise } = require('mongoose');
 const db = require('../models')
 const Family = db.family;
 const Profile = db.profile;
@@ -43,13 +42,24 @@ exports.findOne = (req, res) => {
 
     Family
         .findById(id)
-        .then(data => {
-            if (!data)
+        .then(async family => {
+            if (!family)
                 res.status(404).send({
                     message: "Not found Family with id " + id
                 });
-            else 
-                res.send(data);
+            else {
+                let membersFamily = await Profile.find({family: family._id}).select('+name -_id');
+                let members = [];
+
+                for (const member of membersFamily) {
+                    members.push({
+                        name: member.name,
+                        age: member.age
+                    });
+                }
+
+                res.send({family, members});
+            }
         })
         .catch(() => {
             res.status(500).send({

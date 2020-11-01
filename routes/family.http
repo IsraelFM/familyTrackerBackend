@@ -3,7 +3,7 @@
 
 ### Busca uma família
 
-GET  http://localhost:3000/api/family/5f9a007bf864041e8ef85c2d HTTP/1.1
+GET  http://localhost:3000/api/family/5f9e1d2808c8e50f444468f4 HTTP/1.1
 
 ### Registra uma família
 
