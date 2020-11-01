@@ -1,5 +1,7 @@
 const db = require('../models')
 const Family = db.family;
+const Profile = db.profile;
+const Position = db.position;
 
 exports.create = async (req, res) => {
     // Validate request
@@ -40,13 +42,24 @@ exports.findOne = (req, res) => {
 
     Family
         .findById(id)
-        .then(data => {
-            if (!data)
+        .then(async family => {
+            if (!family)
                 res.status(404).send({
                     message: "Not found Family with id " + id
                 });
-            else 
-                res.send(data);
+            else {
+                let membersFamily = await Profile.find({family: family._id}).select('+name -_id');
+                let members = [];
+
+                for (const member of membersFamily) {
+                    members.push({
+                        name: member.name,
+                        age: member.age
+                    });
+                }
+
+                res.send({family, members});
+            }
         })
         .catch(() => {
             res.status(500).send({
@@ -119,4 +132,31 @@ exports.delete = (req, res) => {
                 message: "Could not delete Family with id=" + id
             });
         });
+};
+
+exports.findAllPositionOfOneFamily = async (req, res) => {
+    const profile = req.params.id;
+    let familyWithPositions = [];
+
+    let profileData = await Profile.findById(profile).select('family');
+
+    if (profileData && profileData.family) {
+        let membersFamily = await Profile.find({family: profileData.family});
+
+        for (const member of membersFamily) {
+            let position = await Position.findOne({profile: member._id}).select('+location.coordinates -_id');
+
+            familyWithPositions.push({
+                profile: member._id,
+                name: member.name,
+                coordinates: position.location.coordinates
+            });
+        }
+
+        res.status(200).send(familyWithPositions);
+    } else {
+        res.status(404).send({
+            message: `Cannot found Family with profile id=${profile}. Maybe Family was not found!`
+        });
+    }
 };
