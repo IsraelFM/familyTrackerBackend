@@ -58,7 +58,7 @@ exports.findOne = (req, res) => {
                     });
                 }
 
-                res.send({family, members});
+                res.send({_id: family._id, surname: family.surname, members});
             }
         })
         .catch(() => {
